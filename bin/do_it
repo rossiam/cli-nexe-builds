@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+echo OS Info:
+uname -a
+
+python3 --version
+
+node --version

@@ -1,0 +1,21 @@
+{
+	"name": "@smartthings/nexe-builds",
+	"version": "1.0.0",
+	"description": "Cached nexe builds for the SmartThings CLI, test repo",
+	"homepage": "https://github.com/rossiam/cli-nexe-builds.git#readme",
+	"bugs": {
+		"url": "https://github.com/rossiam/cli-nexe-builds.git/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rossiam/cli-nexe-builds.git"
+	},
+	"license": "MIT",
+	"author": "",
+	"type": "commonjs",
+	"main": "index.js",
+	"scripts": {},
+	"dependencies": {
+		"nexe": "^5.0.0-beta.4"
+	}
+}

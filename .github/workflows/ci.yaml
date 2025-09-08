@@ -1,0 +1,46 @@
+# This should probably be "CD" instead or even some alternative name.
+name: CI
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Node for nexe bundling
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      matrix:
+        os: [macos-latest]
+        node_version: ['24.7.0']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      - name: Print working directory
+        run: pwd
+
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+
+      - run: npm ci
+
+      - name: Set up Python 3.13.7 (macOS only)
+        if: runner.os == 'macOS'
+        uses: actions/setup-python@v5 # v6 is available as of a few days ago
+        with:
+          python-version: '3.13.7'
+
+      - name: Run nexe CD build # TODO: better name?
+        run: |
+          echo "github.ref = ${{ github.ref }}"
+          ./bin/do_it
