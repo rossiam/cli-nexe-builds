@@ -13,6 +13,9 @@ jobs:
     name: Build Node for nexe bundling
     runs-on: ${{ matrix.os }}
     timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         # TODO: I assume we should we be being more specific here.
