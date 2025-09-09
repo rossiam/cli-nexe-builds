@@ -12,4 +12,5 @@ echo "Node Info:"
 node --version
 
 echo "ps:"
+which ps
 ps
