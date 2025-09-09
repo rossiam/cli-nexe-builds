@@ -55,6 +55,7 @@ jobs:
           ./bin/do_it
 
       - name: Run nexe CD build on Windows # TODO: better name?
+        shell: pwsh
         if: runner.os == 'Windows'
         run: |
           echo "github.ref = ${{ github.ref }}"
