@@ -1,4 +1,5 @@
-# This should probably be "CD" instead or even some alternative name.
+# This should probably be "CD" instead or even some alternative name. I feel like
+# we should do some versioning before actually publishing though.
 name: CI
 on:
   push:
@@ -13,9 +14,9 @@ jobs:
     name: Build Node for nexe bundling
     runs-on: ${{ matrix.os }}
     timeout-minutes: 180
-    defaults:
-      run:
-        shell: bash
+    # defaults:
+    #   run:
+    #     shell: bash
     strategy:
       matrix:
         # TODO: I assume we should we be being more specific here.
@@ -43,12 +44,18 @@ jobs:
       - run: npm ci
 
       - name: Set up Python 3.13.7
-        # if: runner.os == 'macOS'
-        uses: actions/setup-python@v5 # v6 is available as of a few days ago
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13.7'
 
       - name: Run nexe CD build # TODO: better name?
+        if: runner.os != 'Windows'
         run: |
           echo "github.ref = ${{ github.ref }}"
           ./bin/do_it
+
+      - name: Run nexe CD build on Windows # TODO: better name?
+        if: runner.os == 'Windows'
+        run: |
+          echo "github.ref = ${{ github.ref }}"
+          ./bin/do_it.ps1
