@@ -1,5 +1,6 @@
 import { mkdir } from 'node:fs/promises'
 
+import { request } from '@octokit/request'
 import { compile } from 'nexe'
 
 // valid platform values: 'windows' | 'mac' | 'alpine' | 'linux' // NodePlatform in nexe
