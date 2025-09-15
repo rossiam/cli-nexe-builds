@@ -17,5 +17,8 @@
 	"scripts": {},
 	"dependencies": {
 		"nexe": "^5.0.0-beta.4"
+	},
+	"devDependencies": {
+		"@octokit/request": "^10.0.3"
 	}
 }

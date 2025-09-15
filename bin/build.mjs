@@ -25,6 +25,27 @@ mkdir('dist').catch((error) => {
 	if (error.code !== 'EEXIST') throw error
 })
 
+const owner = 'rossiam'
+const repo = 'cli-nexe-builds'
+
+const ghToken = process.env.GH_TOKEN
+
+if (!ghToken) {
+	console.error('Did not get github token.')
+	process.exit(1)
+}
+
+const releases = await request("GET /repos/:owner/:repo/releases", {
+	headers: {
+		authorization: `token ${ghToken}`,
+	},
+	owner,
+	repo,
+})
+
+console.log('RELEASES:')
+console.log(releases)
+
 // TODO: check if already built like nexe_builds does
 if (false) {
 	compile({
