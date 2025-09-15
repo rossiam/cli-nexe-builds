@@ -14,9 +14,6 @@ jobs:
     name: Build Node for nexe bundling
     runs-on: ${{ matrix.os }}
     timeout-minutes: 180
-    # defaults:
-    #   run:
-    #     shell: bash
     strategy:
       matrix:
         # TODO: I assume we should we be being more specific here.
@@ -48,18 +45,15 @@ jobs:
         with:
           python-version: '3.13.7'
 
-      - name: Check Versions
-        if: runner.os != 'Windows'
-        run: |
-          echo "github.ref = ${{ github.ref }}"
-          ./bin/do_it
-
-      - name: Check Versions on Windows # TODO: better name?
+      - name: Install nasm
         if: runner.os == 'Windows'
-        run: |
-          echo "github.ref = ${{ github.ref }}"
-          ./bin/do_it.ps1
+        run: choco install nasm
 
-      - name: Run nexe CD build # TODO: better name?
+      - name: Check Versions
+        run: |
+          python3 --version
+          node --version
+
+      - name: Build nexe if required
         run: |
           node bin/build.mjs

@@ -1,3 +1,5 @@
+import { mkdir } from 'node:fs/promises'
+
 import { compile } from 'nexe'
 
 // valid platform values: 'windows' | 'mac' | 'alpine' | 'linux' // NodePlatform in nexe
@@ -5,6 +7,7 @@ import { compile } from 'nexe'
 
 const osByPlatform = {
 	darwin: 'mac',
+	win32: 'windows',
 }
 
 const os = osByPlatform[process.platform] ?? process.platform
@@ -18,6 +21,10 @@ console.log(`process.arch = [${process.arch}]`)
 console.log(`process.platform = [${process.platform}]`)
 console.log(`target = ${target}`)
 
+mkdir('dist').catch((error) => {
+	if (error.code !== 'EEXIST') throw error
+})
+
 // TODO: check if already built like nexe_builds does
 if (false) {
 	compile({
@@ -25,9 +32,8 @@ if (false) {
 		build: true,
 		verbose: true,
 		mangle: false,
-		output: target,
+		output: `dist/${target}`,
 		python: 'python3',
-		// targets: [{ version }],
 		targets: [target],
 	}).then(() => {
 		console.log('build finished')
