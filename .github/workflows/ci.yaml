@@ -48,14 +48,18 @@ jobs:
         with:
           python-version: '3.13.7'
 
-      - name: Run nexe CD build # TODO: better name?
+      - name: Check Versions
         if: runner.os != 'Windows'
         run: |
           echo "github.ref = ${{ github.ref }}"
           ./bin/do_it
 
-      - name: Run nexe CD build on Windows # TODO: better name?
+      - name: Check Versions on Windows # TODO: better name?
         if: runner.os == 'Windows'
         run: |
           echo "github.ref = ${{ github.ref }}"
           ./bin/do_it.ps1
+
+      - name: Run nexe CD build # TODO: better name?
+        run: |
+          node bin/build.mjs
