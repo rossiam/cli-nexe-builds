@@ -1,4 +1,4 @@
-import { mkdir, readFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { inspect } from 'node:util'
 
@@ -60,13 +60,20 @@ const release = releases.find(release => release.tag_name === releaseVersion)
 const asset = release.assets?.find(asset => asset.name === target)
 // console.log('ASSET:')
 // console.log(inspect(asset))
+const fakeCompile = async (opts) => {
+	await writeFile(outputFilename, JSON.stringify(opts))
+		.catch(error => {
+			console.log('Caught error writing fake file.')
+			console.log(error)
+		})
+}
 
 const outputFilename = path.join(__dirname, `../dist/${target}`)
 if (asset) {
 	console.log('Found asset already exists; skipping.')
 } else {
 	console.log(`Building ${outputFilename}.`)
-	compile({
+	fakeCompile({
 		input: 'bin/dummy.mjs',
 		build: true,
 		verbose: true,
