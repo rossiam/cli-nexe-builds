@@ -2,4 +2,4 @@
 
 Generate node builds to be used with [nexe] for the SmartThings CLI.
 
-This repository is heavily based on https://github.com/urbdyn/nexe_builds.
+This repository is somewhat based on https://github.com/urbdyn/nexe_builds.
