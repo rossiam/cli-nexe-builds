@@ -61,23 +61,23 @@ const asset = release.assets?.find(asset => asset.name === target)
 // console.log('ASSET:')
 // console.log(inspect(asset))
 
-
+const outputFilename = path.join(__dirname, `../dist/${target}`)
 if (asset) {
 	console.log('Found asset already exists; skipping.')
 } else {
-	console.log(`Building ${target}.`)
+	console.log(`Building ${outputFilename}.`)
 	compile({
 		input: 'bin/dummy.mjs',
 		build: true,
 		verbose: true,
 		mangle: false,
-		output: `dist/${target}`,
+		output: outputFilename,
 		python: 'python3',
 		targets: [target],
 	}).then(async () => {
 		console.log('Build finished; uploading asset.')
 
-		const buildFileContents = await readFile(path.join('dist', target))
+		const buildFileContents = await readFile(outputFilename)
 		console.log(`read file containing ${buildFileContents.length} bytes`)
 		await request(
 			`POST /repos/:owner/:repo/releases/:release_id/assets?name=:name`,

@@ -53,6 +53,8 @@ jobs:
         run: |
           python3 --version
           node --version
+          echo "Working directory:"
+          pwd
 
       - name: Build nexe if required
         run: |
