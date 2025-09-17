@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { inspect } from 'node:util'
 
@@ -83,6 +83,12 @@ if (asset) {
 		targets: [target],
 	}).then(async () => {
 		console.log('Build finished; uploading asset.')
+
+		const currentDir = path.join(__dirname, '..')
+		const files = await readdir(currentDir)
+		console.log(`files in current dir = ${JSON.stringify(files)}`)
+		const distFiles = await readdir(path.join(currentDir, 'dist'))
+		console.log(`files in dist dir = ${JSON.stringify(distFiles)}`)
 
 		const buildFileContents = await readFile(outputFilename)
 		console.log(`read file containing ${buildFileContents.length} bytes`)
