@@ -54,12 +54,7 @@ const release = releases.find(release => release.tag_name === releaseVersion)
 
 // TODO: if there is no release, create one
 
-// console.log('RELEASE:')
-// console.log(inspect(release))
-
 const asset = release.assets?.find(asset => asset.name === target)
-// console.log('ASSET:')
-// console.log(inspect(asset))
 const fakeCompile = async (opts) => {
 	await writeFile(outputFilename, JSON.stringify(opts))
 		.catch(error => {
@@ -85,8 +80,6 @@ if (asset) {
 		console.log('Build finished; uploading asset.')
 
 		const currentDir = path.join(__dirname, '..')
-		const files = await readdir(currentDir)
-		console.log(`files in current dir = ${JSON.stringify(files)}`)
 		const distFiles = await readdir(path.join(currentDir, 'dist'))
 		console.log(`files in dist dir = ${JSON.stringify(distFiles)}`)
 

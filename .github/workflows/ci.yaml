@@ -13,7 +13,7 @@ jobs:
   build:
     name: Build Node for nexe bundling
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 240
+    timeout-minutes: 360
     strategy:
       matrix:
         # TODO: I assume we should we be being more specific here.
