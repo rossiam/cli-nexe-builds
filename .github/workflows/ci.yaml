@@ -18,6 +18,8 @@ jobs:
       matrix:
         # TODO: I assume we should we be being more specific here.
         os: [macos-latest, ubuntu-latest, windows-latest]
+      # This allows builds like Linux to continue when builds like Windows fail.
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v4
