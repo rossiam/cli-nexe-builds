@@ -73,7 +73,7 @@ if (asset) {
 	console.log('Found asset already exists; skipping.')
 } else {
 	console.log(`Building ${outputFilename}.`)
-	fakeCompile({
+	compile({
 		input: 'bin/dummy.mjs',
 		build: true,
 		verbose: true,
