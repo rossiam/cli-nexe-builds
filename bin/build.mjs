@@ -90,7 +90,8 @@ if (asset) {
 		const distFiles = await readdir(path.join(currentDir, 'dist'))
 		console.log(`files in dist dir = ${JSON.stringify(distFiles)}`)
 
-		const buildFileContents = await readFile(outputFilename)
+		const filename = os === 'windows' ? `${outputFilename}.exe` : outputFilename
+		const buildFileContents = await readFile(filename)
 		console.log(`read file containing ${buildFileContents.length} bytes`)
 		await request(
 			`POST /repos/:owner/:repo/releases/:release_id/assets?name=:name`,
