@@ -5,6 +5,9 @@ import { inspect } from 'node:util'
 import { request } from '@octokit/request'
 import { compile } from 'nexe'
 
+
+const skipUpload = process.argv.length > 2 && process.argv[2] === '--skip-upload'
+
 // valid platform values: 'windows' | 'mac' | 'alpine' | 'linux' // NodePlatform in nexe
 // valid arch values 'x86' | 'x64' | 'arm' | 'arm64' // NodeArch in nexe
 
@@ -55,13 +58,6 @@ const release = releases.find(release => release.tag_name === releaseVersion)
 // TODO: if there is no release, create one
 
 const asset = release.assets?.find(asset => asset.name === target)
-const fakeCompile = async (opts) => {
-	await writeFile(outputFilename, JSON.stringify(opts))
-		.catch(error => {
-			console.log('Caught error writing fake file.')
-			console.log(error)
-		})
-}
 
 const outputFilename = path.join(__dirname, `../dist/${target}`)
 if (asset) {
@@ -77,30 +73,34 @@ if (asset) {
 		python: 'python3',
 		targets: [target],
 	}).then(async () => {
-		console.log('Build finished; uploading asset.')
-
-		const currentDir = path.join(__dirname, '..')
-		const distFiles = await readdir(path.join(currentDir, 'dist'))
-		console.log(`files in dist dir = ${JSON.stringify(distFiles)}`)
-
-		const filename = os === 'windows' ? `${outputFilename}.exe` : outputFilename
-		const buildFileContents = await readFile(filename)
-		console.log(`read file containing ${buildFileContents.length} bytes`)
-		await request(
-			`POST /repos/:owner/:repo/releases/:release_id/assets?name=:name`,
-			{
-				baseUrl: "https://uploads.github.com",
-				headers: {
-					'Content-Type': 'application/x-binary',
-					'Content-Length': buildFileContents.length,
-					...gitAPIHeaders,
+		if (skipUpload) {
+			console.log('Build finished; skipping upload.')
+		} else {
+			console.log('Build finished; uploading asset.')
+	
+			const currentDir = path.join(__dirname, '..')
+			const distFiles = await readdir(path.join(currentDir, 'dist'))
+			console.log(`files in dist dir = ${JSON.stringify(distFiles)}`)
+	
+			const filename = os === 'windows' ? `${outputFilename}.exe` : outputFilename
+			const buildFileContents = await readFile(filename)
+			console.log(`read file containing ${buildFileContents.length} bytes`)
+			await request(
+				`POST /repos/:owner/:repo/releases/:release_id/assets?name=:name`,
+				{
+					baseUrl: "https://uploads.github.com",
+					headers: {
+						'Content-Type': 'application/x-binary',
+						'Content-Length': buildFileContents.length,
+						...gitAPIHeaders,
+					},
+					name: target,
+					owner,
+					repo,
+					release_id: release.id,
+					data: buildFileContents,
 				},
-				name: target,
-				owner,
-				repo,
-				release_id: release.id,
-				data: buildFileContents,
-			},
-		)
+			)
+		}
 	})
 }
